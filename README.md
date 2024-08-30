@@ -22,11 +22,11 @@ For 1d data:
 
 1 initd data and 3 sampling data. The addition of new sampling points results in a more uniform kernel density (maximum entropy as much as possible)
 
-![](C:\Users\Bowen\Desktop\repos\HdGkde\image\kde_1d.png)
+<img title="" src="image/kde_1d.png" alt="loading-ag-89" data-align="inline">
 
 For 2d data:
 
-![](C:\Users\Bowen\Desktop\repos\HdGkde\image\kde_2d.png)
+![loading-ag-91](image/kde_2d.png)
 
 ## Improvement requirements
 
