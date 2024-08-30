@@ -35,62 +35,64 @@ There may be some computational inefficiencies in the current implementation, an
 ## Principle
 
 We have a current action set $A$. When we determine initial values of $a^c$, we merge it into the original action set to get an action set $A^c$. Let
-$$
-\begin{aligned}
-y_j&=p (a_j)\log p(a_j), j\in\{1, ..., |A^c|\}\\
 
-\end{aligned}
 $$
+y_j = p(a_j)\log p(a_j), \quad j \in \{1, \ldots, |A^c|\}
+$$
+
 Approximate calculation of entropy
+
 $$
 \begin{aligned}
-H(a) &=-\int p(a)\log p(a) \mathrm{d}a\\
+H(a) &=-\int p(a)\log p(a) \,\mathrm{d}a \\
 &\approx-\sum_{j=1}^{m-1}\left(\frac{a_j-a_{j-1}}{2}\right)(y_j+y_{j-1})
-
 \end{aligned}
 $$
+
 According to the Gaussian kernel density estimation method, for $p$, we have
-$$
-p(a_j) = \frac1{|A^c|h\sqrt{2\pi}}\sum^{|A^c|}_{i=1}\exp\left\{-\frac{(a_j-a_i)^2}{2h^2}\right\}
-$$
-
-$|A|$ represents the length of the set $A$. Finding the gradient is to find the gradient of $\Delta H$ w.r.t $a^c$:
 
 $$
-\frac{\partial \Delta H}{\partial a^c}=-\sum_{j=1}^{m-1}\left(\frac{a_j-a_{j-1}}{2}\right)\left(\frac{\partial y_{j}}{\partial a^c}+\frac{\partial y_{j-1}}{\partial a^c}\right)
+p(a_j) = \frac{1}{|A^c|h\sqrt{2\pi}}\sum^{|A^c|}_{i=1}\exp\left\{-\frac{(a_j-a_i)^2}{2h^2}\right\}
 $$
 
-Now consider $y_{j}$ :
+$|A|$ represents the length of the set $A$. Finding the gradient is to find the gradient of $H$ with respect to $a^c$:
+
+$$
+\frac{\partial H}{\partial a^c}=-\sum_{j=1}^{m-1}\left(\frac{a_j-a_{j-1}}{2}\right)\left(\frac{\partial y_j}{\partial a^c}+\frac{\partial y_{j-1}}{\partial a^c}\right)
+$$
+
+Now consider $y_j$:
 
 $$
 \begin{aligned}
-y_j&=p(a_j)\log p(a_j)\\
-\log p(a_j)&=-\log(|A^c|h\sqrt{2\pi})+\prod^{|A^c|}_{k=1}\left[-\frac{(a_j-a_k)^2}{2h^2}\right]
+y_j &= p(a_j)\log p(a_j) \\
+\log p(a_j) &= -\log(|A^c|h\sqrt{2\pi}) + \sum_{k=1}^{|A^c|}\left[-\frac{(a_j-a_k)^2}{2h^2}\right]
 \end{aligned}
 $$
 
 Consider the differential form of $y_j$:
+
 $$
-\frac{\partial y_{j}}{\partial a^c}=\frac{\partial p(a_j)}{\partial a^c}\big[\log p(a_j)+1\big]
+\frac{\partial y_j}{\partial a^c} = \frac{\partial p(a_j)}{\partial a^c}\big[\log p(a_j)+1\big]
 $$
+
 where
-$$
-\begin{aligned}
-\frac{\partial p(a_j)}{\partial a^c}
-
-&=-\frac{1}{|A^c|h\sqrt{2\pi}}\exp\left\{-\frac{(a_j-a^c)^2}{2h^2}\right\}·\frac{a_j-a^c}{h^2}\\
-&=-\frac{a_j-a^c}{|A^c|h^3\sqrt{2\pi}}\exp\left\{-\frac{(a_j-a^c)^2}{2h^2}\right\}
-
-\end{aligned}
-$$
-
-Therefore, the differential of $y_j'$ with respect to $a^c$ can be found:
 
 $$
 \begin{aligned}
-\frac{\partial y_{j}}{\partial a^c}&=\frac{\partial p(a_j)}{\partial a^c}\big[\log p(a_j)+1\big]\\
-&=-\frac{a_j-a^c}{|A^c|h^3\sqrt{2\pi}}\exp\left\{-\frac{(a_j-a^c)^2}{2h^2}\right\}·\left\{-\log(|A^c|h\sqrt{2\pi})+\prod^{|A^c|}_{k=1}\left[-\frac{(a_j-a_k)^2}{2h^2}\right]+1\right\}
+\frac{\partial p(a_j)}{\partial a^c} 
+&= -\frac{1}{|A^c|h\sqrt{2\pi}}\exp\left\{-\frac{(a_j-a^c)^2}{2h^2}\right\} \cdot \frac{a_j-a^c}{h^2} \\
+&= -\frac{a_j-a^c}{|A^c|h^3\sqrt{2\pi}}\exp\left\{-\frac{(a_j-a^c)^2}{2h^2}\right\}
 \end{aligned}
 $$
 
-The calculation of $\frac{\partial y'_{j-1}}{\partial a^c}$ is similar. We can substitute them into $\frac{\partial \Delta H}{\partial a^c}$ to calculate the specific gradient. In summary, the gradient of the initial sampling action based on maximizing information entropy is calculable. Once the gradient value is calculated, it can be multiplied by the learning rate and added to the original $a^c$ for multiple iterations. Therefore, the sampling can be optimized.
+Therefore, the differential of $y_j$ with respect to $a^c$ can be found:
+
+$$
+\begin{aligned}
+\frac{\partial y_j}{\partial a^c} &= \frac{\partial p(a_j)}{\partial a^c}\big[\log p(a_j)+1\big] \\
+&= -\frac{a_j-a^c}{|A^c|h^3\sqrt{2\pi}}\exp\left\{-\frac{(a_j-a^c)^2}{2h^2}\right\} \cdot \left\{-\log(|A^c|h\sqrt{2\pi}) + \sum_{k=1}^{|A^c|}\left[-\frac{(a_j-a_k)^2}{2h^2}\right] + 1\right\}
+\end{aligned}
+$$
+
+The calculation of $\frac{\partial y_{j-1}}{\partial a^c}$ is similar. We can substitute them into $\frac{\partial H}{\partial a^c}$ to calculate the specific gradient. In summary, the gradient of the initial sampling action based on maximizing information entropy is calculable. Once the gradient value is calculated, it can be multiplied by the learning rate and added to the original $a^c$ for multiple iterations. Therefore, the sampling can be optimized.
