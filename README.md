@@ -45,28 +45,28 @@ Approximate calculation of entropy
 $$
 \begin{aligned}
 H(a) &=-\int p(a)\log p(a) \,\mathrm{d}a \\
-&\approx-\sum_{j=1}^{m-1}\left(\frac{a_j-a_{j-1}}{2}\right)(y_j+y_{j-1})
+&\approx-\sum_{j=1}^{m-1}\Big(\frac{a_j-a_{j-1}}{2}\Big)(y_j+y_{j-1})
 \end{aligned}
 $$
 
 According to the Gaussian kernel density estimation method, for $p$, we have
 
 $$
-p(a_j) = \frac{1}{|A^c|h\sqrt{2\pi}}\sum^{|A^c|}_{i=1}\exp\left\{-\frac{(a_j-a_i)^2}{2h^2}\right\}
+p(a_j) = \frac{1}{|A^c|h\sqrt{2\pi}}\sum^{|A^c|}_{i=1}\exp\Big\{-\frac{(a_j-a_i)^2}{2h^2}\Big\}
 $$
 
 $|A|$ represents the length of the set $A$. Finding the gradient is to find the gradient of $H$ with respect to $a^c$:
 
 $$
-\frac{\partial H}{\partial a^c}=-\sum_{j=1}^{m-1}\left(\frac{a_j-a_{j-1}}{2}\right)\left(\frac{\partial y_j}{\partial a^c}+\frac{\partial y_{j-1}}{\partial a^c}\right)
+\frac{\partial H}{\partial a^c}=-\sum_{j=1}^{m-1}\Big(\frac{a_j-a_{j-1}}{2}\Big)\Big(\frac{\partial y_j}{\partial a^c}+\frac{\partial y_{j-1}}{\partial a^c}\Big)
 $$
 
 Now consider $y_j$:
 
 $$
 \begin{aligned}
-y_j &= p(a_j)\log p(a_j) \\
-\log p(a_j) &= -\log(|A^c|h\sqrt{2\pi}) + \sum_{k=1}^{|A^c|}\left[-\frac{(a_j-a_k)^2}{2h^2}\right]
+&y_j = p(a_j)\log p(a_j) \\
+&\log p(a_j) = -\log(|A^c|h\sqrt{2\pi}) + \sum_{k=1}^{|A^c|}\Big[-\frac{(a_j-a_k)^2}{2h^2}\Big]
 \end{aligned}
 $$
 
@@ -81,8 +81,8 @@ where
 $$
 \begin{aligned}
 \frac{\partial p(a_j)}{\partial a^c} 
-&= -\frac{1}{|A^c|h\sqrt{2\pi}}\exp\left\{-\frac{(a_j-a^c)^2}{2h^2}\right\} \cdot \frac{a_j-a^c}{h^2} \\
-&= -\frac{a_j-a^c}{|A^c|h^3\sqrt{2\pi}}\exp\left\{-\frac{(a_j-a^c)^2}{2h^2}\right\}
+&= -\frac{1}{|A^c|h\sqrt{2\pi}}\exp\Big\{-\frac{(a_j-a^c)^2}{2h^2}\Big\} \cdot \frac{a_j-a^c}{h^2} \\
+&= -\frac{a_j-a^c}{|A^c|h^3\sqrt{2\pi}}\exp\Big\{-\frac{(a_j-a^c)^2}{2h^2}\Big\}
 \end{aligned}
 $$
 
@@ -91,7 +91,7 @@ Therefore, the differential of $y_j$ with respect to $a^c$ can be found:
 $$
 \begin{aligned}
 \frac{\partial y_j}{\partial a^c} &= \frac{\partial p(a_j)}{\partial a^c}\big[\log p(a_j)+1\big] \\
-&= -\frac{a_j-a^c}{|A^c|h^3\sqrt{2\pi}}\exp\left\{-\frac{(a_j-a^c)^2}{2h^2}\right\} \cdot \left\{-\log(|A^c|h\sqrt{2\pi}) + \sum_{k=1}^{|A^c|}\left[-\frac{(a_j-a_k)^2}{2h^2}\right] + 1\right\}
+&= -\frac{a_j-a^c}{|A^c|h^3\sqrt{2\pi}}\exp\Big\{-\frac{(a_j-a^c)^2}{2h^2}\Big\} \cdot \Big\{-\log(|A^c|h\sqrt{2\pi}) + \sum_{k=1}^{|A^c|}\Big[-\frac{(a_j-a_k)^2}{2h^2}\Big] + 1\Big\}
 \end{aligned}
 $$
 
